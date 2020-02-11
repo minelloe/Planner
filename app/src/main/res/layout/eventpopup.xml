@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="350dp"
+    android:layout_height="475dp"
+    android:background="@drawable/dialog_bg"
+    android:layout_gravity="center"
+
+
+    >
+
+
+
+<LinearLayout
+    android:orientation="vertical"
+        android:layout_width="350dp"
+        android:layout_height="158dp"
+        android:background="@drawable/dialog_bg2"
+        android:layout_gravity="center"
+
+        >
+    <TextView
+        android:id="@+id/tvClosePopup"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:text="X"
+        android:layout_gravity="end"
+        android:textColor="#e5e4cc"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/circle_bg"
+/>
+
+    <TextView
+        android:id="@+id/tvPopupTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat"
+        android:text="Eventname"
+        android:textColor="#e5e4cc"
+        android:textSize="35sp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"/>
+
+    <EditText
+        android:id="@+id/etPopupTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat"
+        android:text="Eventname"
+        android:textColor="#e5e4cc"
+        android:textSize="35sp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        android:visibility="invisible"/>
+
+</LinearLayout>
+
+    <LinearLayout
+
+        android:layout_width="350dp"
+        android:layout_height="80dp"
+        android:orientation="horizontal"
+>
+
+        <ImageView
+            android:layout_width="49dp"
+            android:layout_height="53dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="19dp"
+            android:src="@drawable/calendaricon" />
+
+        <TextView
+            android:id="@+id/tvPopupDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="29dp"
+            android:layout_marginRight="21dp"
+            android:fontFamily="@font/montserrat"
+            android:text="00.00.000"
+            android:inputType="none"
+            android:focusable="false"
+            android:textColor="#698474"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/etPopupDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="29dp"
+            android:layout_marginRight="21dp"
+            android:fontFamily="@font/montserrat"
+            android:inputType="none"
+            android:focusable="false"
+            android:text="00.00.000"
+            android:textColor="#698474"
+            android:textSize="20sp"
+            android:visibility="invisible"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+
+        android:layout_width="350dp"
+        android:layout_height="83dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="49dp"
+            android:layout_height="53dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/clockicon" />
+
+        <TextView
+        android:id="@+id/tvPopupTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginRight="21dp"
+        android:fontFamily="@font/montserrat"
+        android:text="00:00"
+
+        android:textColor="#698474"
+        android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/etPopupTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginRight="21dp"
+            android:fontFamily="@font/montserrat"
+            android:text="00:00"
+            android:inputType="none"
+            android:focusable="false"
+            android:textColor="#698474"
+            android:textSize="20sp"
+            android:visibility="invisible"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+
+        android:layout_width="350dp"
+        android:layout_height="83dp"
+        android:orientation="horizontal"
+>
+
+        <TextView
+            android:id="@+id/tvPopupNotes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="21dp"
+            android:fontFamily="@font/montserrat"
+            android:text="Lorem ipsum dolor sit amet, pro no alii dolore explicari."
+            android:textColor="#698474"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/etPopupNotes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="21dp"
+            android:fontFamily="@font/montserrat"
+            android:text="Lorem ipsum dolor sit amet, pro no alii dolore explicari."
+            android:textColor="#698474"
+            android:textSize="20sp"
+            android:visibility="invisible"/>
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+
+        android:layout_width="350dp"
+        android:layout_height="83dp"
+        android:orientation="horizontal"
+        >
+
+        <ImageView
+            android:id="@+id/ivDelete"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="start"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/trashicon" />
+
+        <ImageView
+            android:id="@+id/ivEditEvent"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="end"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="200dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/peniconblack" />
+
+
+
+    <ImageView
+        android:id="@+id/ivConfirmChanges"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="end"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/checkmarkicon"
+        android:visibility="invisible"/>
+    </LinearLayout>
+</LinearLayout>

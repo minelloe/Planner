@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient"
+    tools:context=".EventCreator">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/the_blacklist"
+        android:text="New Event"
+        android:textSize="70sp"
+        android:textColor="#e5e4cc"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.064" />
+
+    <EditText
+        android:id="@+id/etNEName"
+        android:layout_width="296dp"
+        android:layout_height="51dp"
+        android:background="@drawable/custom_edittexts"
+        android:ems="10"
+        android:fontFamily="@font/montserrat"
+        android:hint="name"
+        android:inputType="textPersonName"
+        android:paddingLeft="10dp"
+        android:textColor="#698474"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+        app:layout_constraintVertical_bias="0.052" />
+
+    <EditText
+        android:id="@+id/etNEDate"
+        android:layout_width="161dp"
+        android:layout_height="45dp"
+        android:background="@drawable/custom_edittexts"
+        android:ems="10"
+        android:fontFamily="@font/montserrat"
+        android:hint="date"
+        android:inputType="none"
+        android:focusable="false"
+        android:paddingLeft="10dp"
+        android:textColor="#698474"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.242"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etNEName"
+        app:layout_constraintVertical_bias="0.043" />
+
+    <EditText
+        android:id="@+id/etNETime"
+        android:layout_width="129dp"
+        android:layout_height="48dp"
+        android:background="@drawable/custom_edittexts"
+        android:ems="10"
+        android:fontFamily="@font/montserrat"
+        android:hint="time"
+        android:inputType="none"
+        android:focusable="false"
+        android:paddingLeft="10dp"
+        android:textColor="#698474"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.81"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etNEName"
+        app:layout_constraintVertical_bias="0.042" />
+
+    <EditText
+        android:id="@+id/etNENotes"
+        android:layout_width="295dp"
+        android:layout_height="49dp"
+        android:background="@drawable/custom_edittexts"
+        android:ems="10"
+        android:fontFamily="@font/montserrat"
+        android:hint="notes"
+        android:inputType="textPersonName"
+        android:paddingLeft="10dp"
+        android:textColor="#698474"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etNEDate"
+        app:layout_constraintVertical_bias="0.032" />
+
+    <Button
+        android:id="@+id/btnGoToNewEvent"
+        android:layout_width="293dp"
+        android:layout_height="45dp"
+        android:background="@drawable/custom_buttons"
+        android:fontFamily="@font/montserrat"
+        android:text="confirm"
+        android:textColor="#698474"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etNENotes"
+        app:layout_constraintVertical_bias="0.055" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
