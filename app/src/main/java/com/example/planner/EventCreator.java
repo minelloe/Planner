@@ -1,44 +1,85 @@
 package com.example.planner;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.MultiAutoCompleteTextView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.allyants.notifyme.NotifyMe;
+
+
 
 //firebase imports
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.skyhope.eventcalenderlibrary.CalenderEvent;
+import com.skyhope.eventcalenderlibrary.listener.CalenderDayClickListener;
+import com.skyhope.eventcalenderlibrary.model.DayContainerModel;
+import com.skyhope.eventcalenderlibrary.model.Event;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class EventCreator extends AppCompatActivity {
 
     private static final String TAG = "EventCreator";
+    //Edittexts
     private EditText NEName;
     private EditText NEDate;
     private EditText NETime;
     private EditText NENotes;
+    //Buttons
     private Button NECreate;
+    //Textviews
     private TextView tvTest;
+
+
+    //Dialogs
+    private Dialog ReminderPopup;
+
+
+
+    //Calendar stuff
     private Calendar mCurrentDate;
     private Calendar currentTime;
     private int hour, minute;
     private int day, month, year;
+    private Calendar now;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
+
+
+
+
 
     //firebase stuff
     private FirebaseAuth mAuth;
@@ -54,18 +95,30 @@ public class EventCreator extends AppCompatActivity {
         updateUI(currentUser);
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_creator);
+
+        //createNotificationChannel();
+
         NEName = (EditText) findViewById(R.id.etNEName);
         NEDate = (EditText) findViewById(R.id.etNEDate);
         NETime = (EditText) findViewById(R.id.etNETime);
         NENotes = (EditText) findViewById(R.id.etNENotes);
+
         NECreate = (Button) findViewById(R.id.btnGoToNewEvent);
+
+
+
+
 
         mCurrentDate = Calendar.getInstance();
         currentTime = Calendar.getInstance();
+
+        now = Calendar.getInstance();
 
         hour = currentTime.get(Calendar.HOUR_OF_DAY);
         minute = currentTime.get(Calendar.MINUTE);
@@ -77,12 +130,17 @@ public class EventCreator extends AppCompatActivity {
         NEDate.setText("date");
         NETime.setText("time");
 
+        ReminderPopup = new Dialog(this);
+
+
+
         NETime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(EventCreator.this,  R.style.TimePickerTheme, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+
                         String fh = ""+hour;
                         String fm = ""+minute;
                         if (hour <10){
@@ -127,7 +185,81 @@ public class EventCreator extends AppCompatActivity {
         NECreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NECreate();
+
+                FirebaseUser currentUser = mAuth.getCurrentUser();
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference();
+                DatabaseReference refCounter = database.getReference();
+
+
+                final String email = currentUser.getEmail().replace('.', ',');
+
+                myRef.child(email + "/events").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        for(DataSnapshot uniqueKeySnapshot : dataSnapshot.getChildren()){
+
+                            String EventName = uniqueKeySnapshot.getKey();
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            DatabaseReference ref2 = database.getReference(email + "/events/" + EventName);
+
+                            // Attach a listener to read the data at our posts reference
+                            ref2.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                    String name = dataSnapshot.child("name").getValue().toString();
+                                    if (NEName.getText().toString().matches(name)) {
+                                        Toast.makeText(EventCreator.this, "Please choose a different name as an event with the same name already exists! :)", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    } else {
+                                        if (NEName.getText().toString().matches("")) {
+                                            Toast.makeText(EventCreator.this, "Please fill out all required information before adding a notification! :)", Toast.LENGTH_SHORT).show();
+                                            return;
+                                        } else {
+                                            if (NEDate.getText().toString().matches("date")) {
+                                                Toast.makeText(EventCreator.this, "Please fill out all required information before adding a notification! :)", Toast.LENGTH_SHORT).show();
+                                                return;
+                                            } else {
+                                                if (NETime.getText().toString().matches("time")) {
+                                                    Toast.makeText(EventCreator.this, "Please fill out all required information before adding a notification! :)", Toast.LENGTH_SHORT).show();
+                                                    return;
+                                                } else {
+                                                    NECreate();
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    System.out.println("The read failed: " + databaseError.getCode());
+                                }
+                            });
+                            //Toast.makeText(MainPage.this,"EventName: " + EventName,Toast.LENGTH_LONG).show();
+                        }
+                        //Toast.makeText(MainPage.this,"Reached hiYA",Toast.LENGTH_LONG).show();
+                    }
+
+
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+
+
+                });
+
+
+
+
+
+
+
             }
         });
     }
@@ -154,15 +286,155 @@ public class EventCreator extends AppCompatActivity {
 
         String email = user.getEmail();
         String EmailToSave = email.replace('.', ',');
-        Toast.makeText(this,"EmailToSave: " + EmailToSave,Toast.LENGTH_LONG).show();
 
-        Event newEvent = new Event(NEName.getText().toString(), NEDate.getText().toString(), NENotes.getText().toString(), NETime.getText().toString());
-        Toast.makeText(this,"Event created" + EmailToSave,Toast.LENGTH_LONG).show();
+        final Calendar dateToSave = Calendar.getInstance();
+
+        EventY newEvent = new EventY(NEName.getText().toString(), NEDate.getText().toString(), NENotes.getText().toString(), NETime.getText().toString());
         mDatabaseReference = mDatabase.getReference().child(EmailToSave + "/events/" + NEName.getText().toString());
         mDatabaseReference.setValue(newEvent);
 
-        Toast.makeText(this,"Saved succesfully",Toast.LENGTH_LONG).show();
-		startActivity(new Intent(this,MainPage.class));
+        String fullDate = NEDate.getText().toString() + " " + NETime.getText().toString() + ":00.00";
+
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSS");
+
+
+        try {
+            dateToSave.setTime(sdf.parse(fullDate));
+            Toast.makeText(this,"tried: " + dateToSave.toString(),Toast.LENGTH_SHORT).show();
+        } catch (ParseException e) {              // Insert this block.
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        Toast.makeText(this,"Date: " + dateToSave.getTime(),Toast.LENGTH_SHORT).show();
+
+
+
+
+
+
+        ReminderPopup.setContentView(R.layout.addreminder_popup);
+
+
+        //Dialog Reminder stuff
+        final Spinner sAmount;
+        final Spinner sType;
+        final Button confirmReminder;
+        final Button refuseReminder;
+
+        sAmount = (Spinner) ReminderPopup.findViewById(R.id.sAmount);
+        sType = (Spinner) ReminderPopup.findViewById(R.id.sType);
+
+        confirmReminder = (Button) ReminderPopup.findViewById(R.id.btnConfirmReminder);
+
+        refuseReminder = (Button) ReminderPopup.findViewById(R.id.btnRefuseNotif);
+
+        refuseReminder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //initialize notification
+                NotifyMe notifyMeFinal = new NotifyMe.Builder((getApplicationContext()))
+                        .title(NEName.getText().toString())
+                        .content("Event due! " + NEDate.getText().toString() + ", " + NETime.getText().toString())
+                        .color(255,0,0,255)
+                        .led_color(255,255,255,255)
+                        .time(dateToSave)
+                        .addAction(new Intent(), "Snooze",false)
+                        .key("test")
+                        .addAction(new Intent(),"Dismiss",true,false)
+                        .addAction(new Intent(),"Done")
+                        .large_icon(R.mipmap.ic_launcher_round)
+                        .build();
+
+                ReminderPopup.dismiss();
+
+                startActivity(new Intent(EventCreator.this,MainPage.class));
+            }
+        });
+
+
+
+        confirmReminder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String amount = sAmount.getSelectedItem().toString();
+                Integer amountInt = Integer.parseInt(amount);
+                amountInt *= -1;
+                String type = sType.getSelectedItem().toString();
+
+                if (type.matches("minutes")){
+                    dateToSave.add(Calendar.MINUTE, amountInt);
+                }
+
+                if (type.matches("hours")){
+                    dateToSave.add(Calendar.HOUR_OF_DAY, amountInt);
+                }
+
+                if (type.matches("days")){
+                    dateToSave.add(Calendar.MONTH, amountInt);
+                }
+
+                Toast.makeText(EventCreator.this,"Amount: " + amountInt.toString(),Toast.LENGTH_LONG).show();
+                Toast.makeText(EventCreator.this,"Type: " + type,Toast.LENGTH_LONG).show();
+                Toast.makeText(EventCreator.this,"Notification-Time: " + dateToSave.getTime(),Toast.LENGTH_LONG).show();
+
+                //initialize notification
+                NotifyMe notifyMe = new NotifyMe.Builder((getApplicationContext()))
+                        .title(NEName.getText().toString())
+                        .content("Event due! " + NEDate.getText().toString() + ", " + NETime.getText().toString())
+                        .color(255,0,0,255)
+                        .led_color(255,255,255,255)
+                        .time(dateToSave)
+                        .addAction(new Intent(), "Snooze",false)
+                        .key("test")
+                        .addAction(new Intent(),"Dismiss",true,false)
+                        .addAction(new Intent(),"Done")
+                        .large_icon(R.mipmap.ic_launcher_round)
+                        .build();
+
+                //initialize notification
+                NotifyMe notifyMeFinal = new NotifyMe.Builder((getApplicationContext()))
+                        .title(NEName.getText().toString())
+                        .content("Event due! " + NEDate.getText().toString() + ", " + NETime.getText().toString())
+                        .color(255,0,0,255)
+                        .led_color(255,255,255,255)
+                        .time(dateToSave)
+                        .addAction(new Intent(), "Snooze",false)
+                        .key("test")
+                        .addAction(new Intent(),"Dismiss",true,false)
+                        .addAction(new Intent(),"Done")
+                        .large_icon(R.mipmap.ic_launcher_round)
+                        .build();
+
+
+                ReminderPopup.dismiss();
+
+                startActivity(new Intent(EventCreator.this,MainPage.class));
+
+            }
+
+
+        });
+
+
+        ReminderPopup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        ReminderPopup.show();
+
+
+
+
+
+
+
+
+
+
+
     }
+
+
+
 }
 

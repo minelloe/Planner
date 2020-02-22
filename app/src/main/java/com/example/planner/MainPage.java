@@ -2,10 +2,14 @@ package com.example.planner;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.TimePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,15 +34,22 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.skyhope.eventcalenderlibrary.CalenderEvent;
+import com.skyhope.eventcalenderlibrary.listener.CalenderDayClickListener;
+import com.skyhope.eventcalenderlibrary.model.DayContainerModel;
+import com.skyhope.eventcalenderlibrary.model.Event;
 
 import org.w3c.dom.Text;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainPage extends AppCompatActivity {
+public class
+MainPage extends AppCompatActivity {
 
 
 
@@ -49,6 +60,8 @@ public class MainPage extends AppCompatActivity {
     private Dialog EventInfo;
 
     //CALENDAR & CLOCK STUFF
+    private CalenderEvent calenderEvent;
+
     private Calendar mCurrentDate;
     private Calendar currentTime;
     private int hour, minute;
@@ -79,10 +92,12 @@ public class MainPage extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
+
 
         Logout = (Button) findViewById(R.id.btnLogout);
         NewEvent = (Button) findViewById(R.id.btnGoToNewEvent);
@@ -91,6 +106,9 @@ public class MainPage extends AppCompatActivity {
 
 
         EventInfo = new Dialog(this);
+        EventInfo.setCanceledOnTouchOutside(false);
+
+        calenderEvent = (CalenderEvent) findViewById(R.id.calender_event);
 
 
         //firebase stuff
@@ -152,6 +170,8 @@ public class MainPage extends AppCompatActivity {
                             items.add(finalInsert.toString());
                             adapter.notifyDataSetChanged();
 
+                            fillCalendar(date, time, name);
+
                         }
 
                         @Override
@@ -159,9 +179,7 @@ public class MainPage extends AppCompatActivity {
                             System.out.println("The read failed: " + databaseError.getCode());
                         }
                     });
-                    //Toast.makeText(MainPage.this,"EventName: " + EventName,Toast.LENGTH_LONG).show();
                 }
-                //Toast.makeText(MainPage.this,"Reached hiYA",Toast.LENGTH_LONG).show();
             }
 
 
@@ -199,6 +217,8 @@ public class MainPage extends AppCompatActivity {
 
                         Toast.makeText(MainPage.this,"Data received,, name: " + name + "date: " + date + "time: " + time + "notes: " + notes,Toast.LENGTH_SHORT).show();
 
+
+
                         ShowPopup(name, date, time, notes);
                     }
 
@@ -220,6 +240,38 @@ public class MainPage extends AppCompatActivity {
 
 
 
+        calenderEvent.initCalderItemClickCallback(new CalenderDayClickListener() {
+            @Override
+            public void onGetDay(DayContainerModel dayContainerModel) {
+
+                Log.d(TAG, dayContainerModel.getDate());
+
+            }
+        });
+
+    }
+
+    private void fillCalendar(final String date, final String time, final String name){
+        /*
+        Toast.makeText(MainPage.this,"reached method",Toast.LENGTH_SHORT).show();
+        Calendar dateForCalendar = Calendar.getInstance();
+        String fullDate = date + " " + time + ":00:00";
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSS");
+        try {
+            dateForCalendar.setTime(sdf.parse(fullDate));
+            Toast.makeText(this,"tried: " + dateForCalendar.toString(),Toast.LENGTH_SHORT).show();
+        } catch (ParseException e) {              // Insert this block.
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        //Event event = new Event(dateForCalendar.getTimeInMillis(), name);
+        //Toast.makeText(MainPage.this,"Event added",Toast.LENGTH_SHORT).show();
+        //calenderEvent.addEvent(event);
+
+         */
     }
 
     //Change UI according to user data.
@@ -285,6 +337,10 @@ public class MainPage extends AppCompatActivity {
                 DatabaseReference DeleteEvent = database.getReference(email + "/events/").child(name);
 
                 DeleteEvent.removeValue();
+
+                EventInfo.dismiss();
+                Intent myIntent = new Intent(MainPage.this, MainPage.class);
+                MainPage.this.startActivity(myIntent);
             }
         });
 
@@ -292,8 +348,7 @@ public class MainPage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 EventInfo.dismiss();
-                Intent myIntent = new Intent(MainPage.this, MainPage.class);
-                MainPage.this.startActivity(myIntent);
+
             }
         });
         EventInfo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -313,6 +368,8 @@ public class MainPage extends AppCompatActivity {
                 tvPopupNotes.setVisibility(View.GONE);
                 ivEditEvent.setVisibility(View.GONE);
                 editEvent(name, date, time, notes);
+
+
             }
         });
     }
@@ -417,7 +474,6 @@ public class MainPage extends AppCompatActivity {
 
 
 
-        Toast.makeText(this,"oldName: " + oldName,Toast.LENGTH_LONG).show();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference mDatabaseReference = database.getReference();
@@ -429,8 +485,7 @@ public class MainPage extends AppCompatActivity {
 
         DeleteEvent.removeValue();
 
-        Event newEvent = new Event(newName, newDate, newNotes, newTime);
-        Toast.makeText(this,"Event created" + email,Toast.LENGTH_LONG).show();
+        EventY newEvent = new EventY(newName, newDate, newNotes, newTime);
         mDatabaseReference = database.getReference().child(email + "/events/" + newName);
         mDatabaseReference.setValue(newEvent);
 
@@ -438,6 +493,7 @@ public class MainPage extends AppCompatActivity {
 
 
     }
+
 
     public void updateListView(){
 

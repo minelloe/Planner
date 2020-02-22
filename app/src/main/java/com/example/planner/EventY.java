@@ -1,12 +1,12 @@
 package com.example.planner;
 
-public class Event {
+public class EventY {
     private String name;
     private String date;
     private String notes;
     private String time;
 
-    public Event(String Name, String Date, String Notes, String Time){
+    public EventY(String Name, String Date, String Notes, String Time){
         this.name = Name;
         this.date = Date;
         this.notes = Notes;

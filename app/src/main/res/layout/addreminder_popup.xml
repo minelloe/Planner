@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="350dp"
+    android:layout_height="200dp"
+    android:background="@drawable/dialog_bg"
+    android:layout_gravity="center"
+
+
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:fontFamily="@font/montserrat"
+        android:layout_marginTop="31dp"
+        android:text="Would you like to add an additional reminder?"
+        android:textSize="20sp"
+        android:textColor="#698474" />
+
+    <LinearLayout
+
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+
+
+        <Spinner
+            android:id="@+id/sAmount"
+            android:layout_gravity="center"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="10"
+            android:textSize="20sp"
+            android:layout_marginLeft="5dp"
+            android:textColor="#698474"
+            android:fontFamily="@font/montserrat"
+            android:entries="@array/Spinner_amount_items"/>
+
+        <Spinner
+            android:id="@+id/sType"
+            android:layout_gravity="center"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:text="days"
+            android:layout_marginLeft="15dp"
+            android:textSize="20sp"
+            android:fontFamily="@font/montserrat"
+            android:textColor="#698474"
+            android:entries="@array/Spinner_type_items"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/montserrat"
+            android:layout_marginLeft="15dp"
+            android:text="before"
+            android:textSize="20sp"
+            android:textColor="#698474" />
+
+    </LinearLayout>
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_gravity="center"
+            android:id="@+id/btnConfirmReminder"
+            android:layout_width="150dp"
+            android:layout_height="45dp"
+            android:background="@drawable/custom_buttons2"
+            android:fontFamily="@font/montserrat"
+            android:layout_marginRight="20dp"
+            android:text="No thanks"
+            android:textColor="#FFFF" />
+
+        <Button
+            android:layout_gravity="center"
+            android:id="@+id/btnRefuseNotif"
+            android:layout_width="150dp"
+            android:layout_height="45dp"
+            android:background="@drawable/custom_buttons2"
+            android:fontFamily="@font/montserrat"
+            android:text="Add reminder"
+            android:textColor="#FFFF" />
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

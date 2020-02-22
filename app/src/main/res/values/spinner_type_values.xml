@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="spinner_type">Spinner Type</string>
+    <string-array name="Spinner_type_items">
+        <item>minutes</item>
+        <item>hours</item>
+        <item>days</item>
+    </string-array>
+</resources>

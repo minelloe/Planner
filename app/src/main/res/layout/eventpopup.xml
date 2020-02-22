@@ -13,12 +13,12 @@
 
 <LinearLayout
     android:orientation="vertical"
-        android:layout_width="350dp"
-        android:layout_height="158dp"
-        android:background="@drawable/dialog_bg2"
-        android:layout_gravity="center"
+    android:layout_width="350dp"
+    android:layout_height="158dp"
+    android:background="@drawable/dialog_bg2"
+    android:layout_gravity="center"
 
-        >
+    >
     <TextView
         android:id="@+id/tvClosePopup"
         android:layout_width="30dp"
