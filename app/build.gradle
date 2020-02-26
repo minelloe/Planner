@@ -30,6 +30,10 @@ dependencies {
     implementation 'com.github.sundeepk:compact-calendar-view:3.0.0'
     implementation 'com.github.mahimrocky:EventCalender:v1.0.0'
 
+    //TAGS
+    implementation 'me.gujun.android.taggroup:library:1.4@aar'
+    implementation 'me.gujun.android.taggroup:library:1.4'
+
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'

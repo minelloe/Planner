@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -46,9 +47,13 @@ import com.skyhope.eventcalenderlibrary.model.Event;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+
+import me.gujun.android.taggroup.TagGroup;
 
 public class EventCreator extends AppCompatActivity {
 
@@ -66,6 +71,23 @@ public class EventCreator extends AppCompatActivity {
 
     //Dialogs
     private Dialog ReminderPopup;
+    private Dialog TagsPopup;
+
+    //Taggroup
+    private TagGroup NETags;
+    List<String> TagList = new ArrayList<String>();
+
+    private TagGroup.OnTagClickListener mTagClickListener = new TagGroup.OnTagClickListener() {
+        @Override
+        public void onTagClick(String tag) {
+            TagList.remove(tag);
+            NETags.setTags(TagList);
+        }
+    };
+
+
+    //LinearLayout
+    private LinearLayout TagBox;
 
 
 
@@ -111,6 +133,11 @@ public class EventCreator extends AppCompatActivity {
 
         NECreate = (Button) findViewById(R.id.btnGoToNewEvent);
 
+        NETags = (TagGroup) findViewById(R.id.NETags);
+        NETags.setOnTagClickListener(mTagClickListener);
+
+
+        TagBox = (LinearLayout) findViewById(R.id.NETagBox);
 
 
 
@@ -131,7 +158,19 @@ public class EventCreator extends AppCompatActivity {
         NETime.setText("time");
 
         ReminderPopup = new Dialog(this);
+        ReminderPopup.setCanceledOnTouchOutside(false);
 
+        TagsPopup = new Dialog(this);
+        TagsPopup.setCanceledOnTouchOutside(false);
+
+
+
+        TagBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddNewTag();
+            }
+        });
 
 
         NETime.setOnClickListener(new View.OnClickListener() {
@@ -289,9 +328,7 @@ public class EventCreator extends AppCompatActivity {
 
         final Calendar dateToSave = Calendar.getInstance();
 
-        EventY newEvent = new EventY(NEName.getText().toString(), NEDate.getText().toString(), NENotes.getText().toString(), NETime.getText().toString());
-        mDatabaseReference = mDatabase.getReference().child(EmailToSave + "/events/" + NEName.getText().toString());
-        mDatabaseReference.setValue(newEvent);
+
 
         String fullDate = NEDate.getText().toString() + " " + NETime.getText().toString() + ":00.00";
 
@@ -342,15 +379,24 @@ public class EventCreator extends AppCompatActivity {
                         .led_color(255,255,255,255)
                         .time(dateToSave)
                         .addAction(new Intent(), "Snooze",false)
-                        .key("test")
+                        .key(NEDate.getText().toString())
                         .addAction(new Intent(),"Dismiss",true,false)
                         .addAction(new Intent(),"Done")
                         .large_icon(R.mipmap.ic_launcher_round)
                         .build();
 
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                String email = user.getEmail();
+                String EmailToSave = email.replace('.', ',');
+                EventY newEvent = new EventY(NEName.getText().toString(), NEDate.getText().toString(), NENotes.getText().toString(), NETime.getText().toString(), "none");
+                mDatabaseReference = mDatabase.getReference().child(EmailToSave + "/events/" + NEName.getText().toString());
+                mDatabaseReference.setValue(newEvent);
+
                 ReminderPopup.dismiss();
 
-                startActivity(new Intent(EventCreator.this,MainPage.class));
+                Intent myIntent = new Intent(EventCreator.this, MainPage.class);
+                EventCreator.this.startActivity(myIntent);
+                overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_up);
             }
         });
 
@@ -363,6 +409,20 @@ public class EventCreator extends AppCompatActivity {
                 Integer amountInt = Integer.parseInt(amount);
                 amountInt *= -1;
                 String type = sType.getSelectedItem().toString();
+
+                //default, standard Notification
+                NotifyMe notifyMeFinal = new NotifyMe.Builder((getApplicationContext()))
+                        .title(NEName.getText().toString())
+                        .content("Event due! " + NEDate.getText().toString() + ", " + NETime.getText().toString())
+                        .color(255,0,0,255)
+                        .led_color(255,255,255,255)
+                        .time(dateToSave)
+                        .addAction(new Intent(), "Snooze",false)
+                        .key(NEName.getText().toString())
+                        .addAction(new Intent(),"Dismiss",true,false)
+                        .addAction(new Intent(),"Done")
+                        .large_icon(R.mipmap.ic_launcher_round)
+                        .build();
 
                 if (type.matches("minutes")){
                     dateToSave.add(Calendar.MINUTE, amountInt);
@@ -380,7 +440,16 @@ public class EventCreator extends AppCompatActivity {
                 Toast.makeText(EventCreator.this,"Type: " + type,Toast.LENGTH_LONG).show();
                 Toast.makeText(EventCreator.this,"Notification-Time: " + dateToSave.getTime(),Toast.LENGTH_LONG).show();
 
-                //initialize notification
+                String NotificationWhen = amount + " " + type;
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                String email = user.getEmail();
+                String EmailToSave = email.replace('.', ',');
+                EventY newEvent = new EventY(NEName.getText().toString(), NEDate.getText().toString(), NENotes.getText().toString(), NETime.getText().toString(), NotificationWhen);
+                mDatabaseReference = mDatabase.getReference().child(EmailToSave + "/events/" + NEName.getText().toString());
+                mDatabaseReference.setValue(newEvent);
+
+
+                //additional Notification
                 NotifyMe notifyMe = new NotifyMe.Builder((getApplicationContext()))
                         .title(NEName.getText().toString())
                         .content("Event due! " + NEDate.getText().toString() + ", " + NETime.getText().toString())
@@ -388,30 +457,20 @@ public class EventCreator extends AppCompatActivity {
                         .led_color(255,255,255,255)
                         .time(dateToSave)
                         .addAction(new Intent(), "Snooze",false)
-                        .key("test")
+                        .key(NEName.getText().toString() + "_additional")
                         .addAction(new Intent(),"Dismiss",true,false)
                         .addAction(new Intent(),"Done")
                         .large_icon(R.mipmap.ic_launcher_round)
                         .build();
 
-                //initialize notification
-                NotifyMe notifyMeFinal = new NotifyMe.Builder((getApplicationContext()))
-                        .title(NEName.getText().toString())
-                        .content("Event due! " + NEDate.getText().toString() + ", " + NETime.getText().toString())
-                        .color(255,0,0,255)
-                        .led_color(255,255,255,255)
-                        .time(dateToSave)
-                        .addAction(new Intent(), "Snooze",false)
-                        .key("test")
-                        .addAction(new Intent(),"Dismiss",true,false)
-                        .addAction(new Intent(),"Done")
-                        .large_icon(R.mipmap.ic_launcher_round)
-                        .build();
+
 
 
                 ReminderPopup.dismiss();
 
-                startActivity(new Intent(EventCreator.this,MainPage.class));
+                Intent myIntent = new Intent(EventCreator.this, MainPage.class);
+                EventCreator.this.startActivity(myIntent);
+                overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_up);
 
             }
 
@@ -422,19 +481,53 @@ public class EventCreator extends AppCompatActivity {
         ReminderPopup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         ReminderPopup.show();
 
-
-
-
-
-
-
-
-
-
-
     }
 
+    public void AddNewTag(){
+        TagsPopup.setContentView(R.layout.tagspopup);
+
+        //Buttons
+        final Button CancelTag;
+        final Button ConfirmTag;
+
+        CancelTag = (Button) TagsPopup.findViewById(R.id.btnCancelTag);
+        ConfirmTag = (Button) TagsPopup.findViewById(R.id.btnConfirmTag);
+
+        //Edittext
+        final EditText NewTag;
+
+        NewTag = (EditText) TagsPopup.findViewById(R.id.etNewTag);
+
+        CancelTag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TagsPopup.dismiss();
+            }
+        });
 
 
+        ConfirmTag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (NewTag.getText().toString().matches("") != true){
+                    TagList.add(NewTag.getText().toString());
+                    //String[] newtags = new String[TagList.size()];
+                    //newtags = TagList.toArray(newtags);
+                    NETags.setTags(TagList);
+                    TagsPopup.dismiss();
+                }
+
+            }
+        });
+
+        TagsPopup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        TagsPopup.show();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_up);
+    }
 }
 

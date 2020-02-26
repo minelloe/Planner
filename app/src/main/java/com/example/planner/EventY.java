@@ -5,12 +5,14 @@ public class EventY {
     private String date;
     private String notes;
     private String time;
+    private String additionalNotification;
 
-    public EventY(String Name, String Date, String Notes, String Time){
+    public EventY(String Name, String Date, String Notes, String Time, String AdditionalNotification){
         this.name = Name;
         this.date = Date;
         this.notes = Notes;
         this.time = Time;
+        this.additionalNotification = AdditionalNotification;
     }
 
     //NAME
@@ -47,5 +49,14 @@ public class EventY {
 
     public void setTime(String Time){
         this.time = Time;
+    }
+
+    //ADDITIONAL NOTIFICATION
+    public String getAdditionalNotification(){
+        return additionalNotification;
+    }
+
+    public void setAdditionalNotification(String AdditionalNotification){
+        this.additionalNotification = AdditionalNotification;
     }
 }

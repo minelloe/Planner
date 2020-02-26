@@ -6,6 +6,13 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+    </style>
+
+    <style name="TagGroup.Custom" parent="@style/TagGroup.Large">
+        <item name="atg_borderColor">#D7B585</item>
+        <item name="atg_textColor">#D7B585</item>
+        <item name="atg_backgroundColor">#faf5eb</item>
     </style>
 
 </resources>

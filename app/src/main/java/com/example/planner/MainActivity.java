@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
     private void signup(){
         Intent myIntent = new Intent(MainActivity.this, SignUp.class);
         MainActivity.this.startActivity(myIntent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
 

@@ -4,23 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#e5e4cc"
+    android:background="#f7f3ee"
     tools:context=".MainPage">
-
-
 
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#698474"
+        android:background="#e6d0b2"
         android:fontFamily="@font/montserrat"
         android:minHeight="?attr/actionBarSize"
-        android:textColor="#e5e4cc"
+        android:textColor="#e6d0b2"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="Planner"
+
         tools:layout_editor_absoluteX="0dp" />
 
     <ListView
@@ -59,15 +57,46 @@
 
     <Button
         android:id="@+id/btnLogout"
-        android:layout_width="212dp"
+        android:layout_width="100dp"
         android:layout_height="43dp"
         android:background="@drawable/custom_buttons"
         android:fontFamily="@font/montserrat"
         android:text="Logout"
-        android:textColor="#698474"
+        android:textColor="#faf5eb"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.973"
+        app:layout_constraintStart_toStartOf="@+id/lvEvents"
+        app:layout_constraintTop_toTopOf="@+id/toolbar2"
+        app:layout_constraintVertical_bias="0.461" />
+
+    <Button
+    android:id="@+id/btnSettings"
+    android:layout_width="100dp"
+    android:layout_height="43dp"
+    android:background="@drawable/custom_buttons"
+    android:fontFamily="@font/montserrat"
+    android:text="Settings"
+    android:textColor="#faf5eb"
+    app:layout_constraintBottom_toTopOf="@+id/lvEvents"
+    app:layout_constraintEnd_toStartOf="@+id/btnGoToNewEvent"
+    app:layout_constraintHorizontal_bias="0.022"
+    app:layout_constraintStart_toStartOf="@+id/lvEvents"
+    app:layout_constraintTop_toTopOf="@+id/toolbar2"
+    app:layout_constraintVertical_bias="0.461" />
+
+
+    <Button
+        android:id="@+id/btnSearchTags"
+        android:layout_width="100dp"
+        android:layout_height="43dp"
+        android:background="@drawable/custom_buttons"
+        android:fontFamily="@font/montserrat"
+        android:text="Search"
+        android:textColor="#faf5eb"
+        app:layout_constraintBottom_toTopOf="@+id/lvEvents"
+        app:layout_constraintEnd_toStartOf="@+id/btnGoToNewEvent"
+        app:layout_constraintHorizontal_bias="0.944"
         app:layout_constraintStart_toStartOf="@+id/lvEvents"
         app:layout_constraintTop_toTopOf="@+id/toolbar2"
         app:layout_constraintVertical_bias="0.461" />
@@ -79,7 +108,7 @@
         android:background="@drawable/custom_buttons"
         android:fontFamily="@font/montserrat"
         android:text="+"
-        android:textColor="#698474"
+        android:textColor="#faf5eb"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar2"
         app:layout_constraintEnd_toStartOf="@+id/btnLogout"

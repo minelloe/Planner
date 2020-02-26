@@ -17,7 +17,7 @@
         android:layout_marginTop="31dp"
         android:text="Would you like to add an additional reminder?"
         android:textSize="20sp"
-        android:textColor="#698474" />
+        android:textColor="#000000" />
 
     <LinearLayout
 
@@ -59,7 +59,7 @@
             android:layout_marginLeft="15dp"
             android:text="before"
             android:textSize="20sp"
-            android:textColor="#698474" />
+            android:textColor="#000000" />
 
     </LinearLayout>
 
@@ -72,21 +72,22 @@
 
         <Button
             android:layout_gravity="center"
-            android:id="@+id/btnConfirmReminder"
+            android:id="@+id/btnRefuseNotif"
             android:layout_width="150dp"
             android:layout_height="45dp"
-            android:background="@drawable/custom_buttons2"
+            android:background="@drawable/custom_buttons"
             android:fontFamily="@font/montserrat"
             android:layout_marginRight="20dp"
             android:text="No thanks"
+            android:alpha="0.60"
             android:textColor="#FFFF" />
 
         <Button
             android:layout_gravity="center"
-            android:id="@+id/btnRefuseNotif"
+            android:id="@+id/btnConfirmReminder"
             android:layout_width="150dp"
             android:layout_height="45dp"
-            android:background="@drawable/custom_buttons2"
+            android:background="@drawable/custom_buttons"
             android:fontFamily="@font/montserrat"
             android:text="Add reminder"
             android:textColor="#FFFF" />

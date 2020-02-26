@@ -11,6 +11,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -38,6 +40,7 @@ import com.skyhope.eventcalenderlibrary.CalenderEvent;
 import com.skyhope.eventcalenderlibrary.listener.CalenderDayClickListener;
 import com.skyhope.eventcalenderlibrary.model.DayContainerModel;
 import com.skyhope.eventcalenderlibrary.model.Event;
+import com.allyants.notifyme.NotifyMe;
 
 import org.w3c.dom.Text;
 
@@ -46,6 +49,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 public class
@@ -56,6 +60,7 @@ MainPage extends AppCompatActivity {
     private static final String TAG = "MainPage";
     private Button Logout;
     private Button NewEvent;
+    private Button Settings;
     private ListView lvEvents;
     private Dialog EventInfo;
 
@@ -71,7 +76,8 @@ MainPage extends AppCompatActivity {
 
 
     private ArrayList<String> items = new ArrayList<>();
-    private int finalamount = 0;
+
+
 
 
 
@@ -101,18 +107,21 @@ MainPage extends AppCompatActivity {
 
         Logout = (Button) findViewById(R.id.btnLogout);
         NewEvent = (Button) findViewById(R.id.btnGoToNewEvent);
+        Settings = (Button) findViewById(R.id.btnSettings);
+
         lvEvents = (ListView) findViewById(R.id.lvEvents);
 
 
+        final List<String[]> ItemsList = new LinkedList<String[]>();
 
-        EventInfo = new Dialog(this);
-        EventInfo.setCanceledOnTouchOutside(false);
+
 
         calenderEvent = (CalenderEvent) findViewById(R.id.calender_event);
 
 
         //firebase stuff
         mAuth = FirebaseAuth.getInstance();
+
         NewEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -138,12 +147,31 @@ MainPage extends AppCompatActivity {
         year = mCurrentDate.get(Calendar.YEAR);
 
         items.clear();
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainPage.this,android.R.layout.simple_list_item_1,items);
+        final ArrayAdapter<String[]> adapter = new ArrayAdapter<String[]>(MainPage.this,android.R.layout.simple_list_item_2, android.R.id.text1, ItemsList){
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent){
+                View view = super.getView(position, convertView, parent);
+
+                String[] entry = ItemsList.get(position);
+                TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+                TextView text2 = (TextView) view.findViewById(android.R.id.text2);
+                text1.setText(entry[0]);
+                text2.setText(entry[1]);
+
+
+
+                return view;
+
+            }
+
+        };
+
+
+
         lvEvents.setAdapter(adapter);
         FirebaseUser currentUser = mAuth.getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
-        DatabaseReference refCounter = database.getReference();
 
 
         final String email = currentUser.getEmail().replace('.', ',');
@@ -158,6 +186,7 @@ MainPage extends AppCompatActivity {
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference ref2 = database.getReference(email + "/events/" + EventName);
 
+
                     // Attach a listener to read the data at our posts reference
                     ref2.addValueEventListener(new ValueEventListener() {
                         @Override
@@ -166,9 +195,13 @@ MainPage extends AppCompatActivity {
                             String name = dataSnapshot.child("name").getValue().toString();
                             String date = dataSnapshot.child("date").getValue().toString();
                             String time = dataSnapshot.child("time").getValue().toString();
-                            String finalInsert = name + ": " + date + ", " + time;
-                            items.add(finalInsert.toString());
+                            String DateTime = date + ", " + time;
                             adapter.notifyDataSetChanged();
+
+                            if (name.matches("ignore") != true){
+                                ItemsList.add(new String[]{name, DateTime});
+                            }
+
 
                             fillCalendar(date, time, name);
 
@@ -197,10 +230,11 @@ MainPage extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                String info = items.get(i);
-                String[] parts = info.split(": ");
-                String name = parts[0];
+                String[] entry = ItemsList.get(i);
+                String name = entry[0];
 
+
+                Toast.makeText(MainPage.this,"Data received,, name: " + name,Toast.LENGTH_SHORT).show();
 
 
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -214,12 +248,13 @@ MainPage extends AppCompatActivity {
                         String date = dataSnapshot.child("date").getValue().toString();
                         String time = dataSnapshot.child("time").getValue().toString();
                         String notes = dataSnapshot.child("notes").getValue().toString();
+                        String additionalNotification = dataSnapshot.child("additionalNotification").getValue().toString();
 
                         Toast.makeText(MainPage.this,"Data received,, name: " + name + "date: " + date + "time: " + time + "notes: " + notes,Toast.LENGTH_SHORT).show();
 
 
 
-                        ShowPopup(name, date, time, notes);
+                        ShowPopup(name, date, time, notes, additionalNotification);
                     }
 
                     @Override
@@ -232,14 +267,25 @@ MainPage extends AppCompatActivity {
 
 
 
-                Toast.makeText(MainPage.this,items.get(i),Toast.LENGTH_SHORT).show();
+
             }
         });
 
-        updateListView();
+        //updateListView();
+
+        Settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(MainPage.this, Settings.class);
+                MainPage.this.startActivity(myIntent);
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            }
+        });
 
 
 
+
+        //Calendar
         calenderEvent.initCalderItemClickCallback(new CalenderDayClickListener() {
             @Override
             public void onGetDay(DayContainerModel dayContainerModel) {
@@ -284,13 +330,17 @@ MainPage extends AppCompatActivity {
 
             Toast.makeText(this,"You're not signed in",Toast.LENGTH_LONG).show();
 
-            //startActivity(new Intent(this,MainActivity.class));
+            Intent myIntent = new Intent(MainPage.this, MainActivity.class);
+            MainPage.this.startActivity(myIntent);
 
         }
     }
 
     private void NewEvent(){
-        startActivity(new Intent(this,EventCreator.class));
+        Intent myIntent = new Intent(MainPage.this, EventCreator.class);
+        MainPage.this.startActivity(myIntent);
+        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
+
     }
 
 
@@ -300,11 +350,13 @@ MainPage extends AppCompatActivity {
         startActivity(new Intent(this,MainActivity.class));
     }
 
-    public void ShowPopup(final String name, final String date, final String time, final String notes){
-        TextView tvClosePopup;
+    public void ShowPopup(final String name, final String date, final String time, final String notes, final String additionalNotification){
+        EventInfo = new Dialog(this);
+        EventInfo.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        final TextView tvClosePopup;
         final ImageView ivEditEvent;
         final ImageView ivDelete;
-        setContentView(R.layout.activity_main_page);
 
 
         EventInfo.setContentView(R.layout.eventpopup);
@@ -314,6 +366,7 @@ MainPage extends AppCompatActivity {
         final TextView tvPopupDate;
         final TextView tvPopupTime;
         final TextView tvPopupNotes;
+        final TextView tvNotification;
 
         //--CLOSE-BUTTON (TEXTVIEW)
         tvClosePopup = (TextView) EventInfo.findViewById(R.id.tvClosePopup);
@@ -327,6 +380,7 @@ MainPage extends AppCompatActivity {
         tvPopupDate = (TextView) EventInfo.findViewById(R.id.tvPopupDate);
         tvPopupTime = (TextView) EventInfo.findViewById(R.id.tvPopupTime);
         tvPopupNotes = (TextView) EventInfo.findViewById(R.id.tvPopupNotes);
+        tvNotification = (TextView) EventInfo.findViewById(R.id.tvNotification);
 
         ivDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -337,6 +391,12 @@ MainPage extends AppCompatActivity {
                 DatabaseReference DeleteEvent = database.getReference(email + "/events/").child(name);
 
                 DeleteEvent.removeValue();
+                NotifyMe.cancel(getApplicationContext(),name);
+
+                if (additionalNotification.matches("none") == false){
+                    NotifyMe.cancel(getApplicationContext(),name + "_additional");
+                }
+
 
                 EventInfo.dismiss();
                 Intent myIntent = new Intent(MainPage.this, MainPage.class);
@@ -357,6 +417,12 @@ MainPage extends AppCompatActivity {
         tvPopupDate.setText(date);
         tvPopupTime.setText(time);
         tvPopupNotes.setText(notes);
+        if (additionalNotification.matches("none") == false){
+            tvNotification.setText("Notification: " + additionalNotification + " before");
+        } else {
+            tvNotification.setText("No additional notification was set.");
+        }
+
 
 
         ivEditEvent.setOnClickListener(new View.OnClickListener() {
@@ -367,6 +433,8 @@ MainPage extends AppCompatActivity {
                 tvPopupTime.setVisibility(View.GONE);
                 tvPopupNotes.setVisibility(View.GONE);
                 ivEditEvent.setVisibility(View.GONE);
+                tvClosePopup.setVisibility(View.GONE);
+                tvNotification.setVisibility(View.GONE);
                 editEvent(name, date, time, notes);
 
 
@@ -391,7 +459,10 @@ MainPage extends AppCompatActivity {
         etPopupTime = (EditText) EventInfo.findViewById(R.id.etPopupTime);
         etPopupNotes = (EditText) EventInfo.findViewById(R.id.etPopupNotes);
 
+
         ivConfirmChanges = (ImageView) EventInfo.findViewById(R.id.ivConfirmChanges);
+
+
 
         etPopupTitle.setVisibility(View.VISIBLE);
         etPopupDate.setVisibility(View.VISIBLE);
@@ -460,9 +531,7 @@ MainPage extends AppCompatActivity {
 
 
                 confirmChanges(oldName, newName, newDate, newTime, newNotes);
-                EventInfo.dismiss();
-                Intent myIntent = new Intent(MainPage.this, MainPage.class);
-                MainPage.this.startActivity(myIntent);
+
 
             }
         });
@@ -471,9 +540,6 @@ MainPage extends AppCompatActivity {
     }
 
     public void confirmChanges(String oldName, String newName, String newDate, String newTime, String newNotes){
-
-
-
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference mDatabaseReference = database.getReference();
@@ -485,54 +551,19 @@ MainPage extends AppCompatActivity {
 
         DeleteEvent.removeValue();
 
-        EventY newEvent = new EventY(newName, newDate, newNotes, newTime);
+        EventY newEvent = new EventY(newName, newDate, newNotes, newTime, "");
         mDatabaseReference = database.getReference().child(email + "/events/" + newName);
         mDatabaseReference.setValue(newEvent);
 
 
-
+        EventInfo.dismiss();
+        Intent myIntent = new Intent(MainPage.this, MainPage.class);
+        MainPage.this.startActivity(myIntent);
 
     }
 
 
     public void updateListView(){
 
-
-
-
-
-
-
-
-
-
-        /*
-        refCounter.child(email).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot uniqueKeySnapshot : dataSnapshot.getChildren()){
-                    long amount = uniqueKeySnapshot.getChildrenCount();
-                    int finalamount = (int) amount;
-                    Toast.makeText(MainPage.this,"ChildrenCount: " + amount,Toast.LENGTH_LONG).show();
-
-                }
-
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        */
-
-
-
-
-
-
-
-        //Toast.makeText(MainPage.this,"updated",Toast.LENGTH_SHORT).show();
     }
 }

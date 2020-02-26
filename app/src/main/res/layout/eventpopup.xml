@@ -10,53 +10,50 @@
     >
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="135dp"
+        android:layout_gravity="center"
+        android:background="@drawable/dialog_bg2"
+        android:orientation="vertical"
 
-<LinearLayout
-    android:orientation="vertical"
-    android:layout_width="350dp"
-    android:layout_height="158dp"
-    android:background="@drawable/dialog_bg2"
-    android:layout_gravity="center"
+        >
 
-    >
-    <TextView
-        android:id="@+id/tvClosePopup"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:text="X"
-        android:layout_gravity="end"
-        android:textColor="#e5e4cc"
-        android:textSize="20dp"
-        android:gravity="center"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/circle_bg"
-/>
+        <TextView
+            android:id="@+id/tvClosePopup"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/circle_bg"
+            android:gravity="center"
+            android:text="X"
+            android:textColor="#e5e4cc"
+            android:textSize="20dp" />
 
-    <TextView
-        android:id="@+id/tvPopupTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/montserrat"
-        android:text="Eventname"
-        android:textColor="#e5e4cc"
-        android:textSize="35sp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="15dp"/>
+        <TextView
+            android:id="@+id/tvPopupTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/montserrat"
+            android:text="Eventname"
+            android:textColor="#faf5eb"
+            android:textSize="35sp" />
 
-    <EditText
-        android:id="@+id/etPopupTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/montserrat"
-        android:text="Eventname"
-        android:textColor="#e5e4cc"
-        android:textSize="35sp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="15dp"
-        android:visibility="invisible"/>
+        <EditText
+            android:id="@+id/etPopupTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/montserrat"
+            android:text="Eventname"
+            android:textColor="#faf5eb"
+            android:textSize="35sp"
+            android:visibility="invisible" />
 
-</LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
 
@@ -83,7 +80,7 @@
             android:text="00.00.000"
             android:inputType="none"
             android:focusable="false"
-            android:textColor="#698474"
+            android:textColor="#000"
             android:textSize="20sp" />
 
         <EditText
@@ -97,7 +94,7 @@
             android:inputType="none"
             android:focusable="false"
             android:text="00.00.000"
-            android:textColor="#698474"
+            android:textColor="#000"
             android:textSize="20sp"
             android:visibility="invisible"/>
 
@@ -106,8 +103,8 @@
 
     <LinearLayout
 
-        android:layout_width="350dp"
-        android:layout_height="83dp"
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
         android:orientation="horizontal">
 
         <ImageView
@@ -117,17 +114,16 @@
             android:src="@drawable/clockicon" />
 
         <TextView
-        android:id="@+id/tvPopupTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="9dp"
-        android:layout_marginRight="21dp"
-        android:fontFamily="@font/montserrat"
-        android:text="00:00"
-
-        android:textColor="#698474"
-        android:textSize="20sp" />
+            android:id="@+id/tvPopupTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginRight="21dp"
+            android:fontFamily="@font/montserrat"
+            android:text="00:00"
+            android:textColor="#000"
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/etPopupTime"
@@ -136,13 +132,13 @@
             android:layout_marginLeft="18dp"
             android:layout_marginTop="9dp"
             android:layout_marginRight="21dp"
-            android:fontFamily="@font/montserrat"
-            android:text="00:00"
-            android:inputType="none"
             android:focusable="false"
-            android:textColor="#698474"
+            android:fontFamily="@font/montserrat"
+            android:inputType="none"
+            android:text="00:00"
+            android:textColor="#000"
             android:textSize="20sp"
-            android:visibility="invisible"/>
+            android:visibility="invisible" />
 
     </LinearLayout>
 
@@ -161,7 +157,7 @@
             android:layout_marginRight="21dp"
             android:fontFamily="@font/montserrat"
             android:text="Lorem ipsum dolor sit amet, pro no alii dolore explicari."
-            android:textColor="#698474"
+            android:textColor="#000"
             android:textSize="20sp" />
 
         <EditText
@@ -172,13 +168,31 @@
             android:layout_marginRight="21dp"
             android:fontFamily="@font/montserrat"
             android:text="Lorem ipsum dolor sit amet, pro no alii dolore explicari."
-            android:textColor="#698474"
+            android:textColor="#000"
             android:textSize="20sp"
             android:visibility="invisible"/>
 
     </LinearLayout>
 
+    <LinearLayout
 
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvNotification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="21dp"
+            android:fontFamily="@font/montserrat"
+            android:text="Notification: 10 minutes before"
+            android:textColor="#000"
+            android:textSize="20sp" />
+
+    </LinearLayout>
 
     <LinearLayout
 
@@ -215,6 +229,7 @@
         android:layout_height="30dp"
         android:layout_gravity="end"
         android:layout_marginRight="20dp"
+        android:layout_marginLeft="200dp"
         android:layout_marginTop="10dp"
         android:src="@drawable/checkmarkicon"
         android:visibility="invisible"/>
