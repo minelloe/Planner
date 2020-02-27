@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="350dp"
+    android:layout_height="150dp"
+    android:background="@drawable/dialog_bg3"
+    android:layout_gravity="center"
+
+
+    >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:fontFamily="@font/montserrat"
+            android:paddingLeft="10dp"
+            android:layout_marginLeft="10dp"
+            android:paddingTop="5dp"
+            android:text="Tags:"
+            android:textColor="#faf5eb"
+            android:textSize="20sp" />
+        <TextView
+            android:id="@+id/tvCloseTagsPopup"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="230dp"
+            android:background="@drawable/circle_bg"
+            android:gravity="center"
+            android:text="X"
+            android:textColor="#e5e4cc"
+            android:textSize="20dp" />
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/InfoTagBox"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:background="@drawable/custom_tagbox"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <me.gujun.android.taggroup.TagGroup
+            android:id="@+id/InfoTags"
+            style="@style/TagGroup.Custom" />
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
