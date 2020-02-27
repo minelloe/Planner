@@ -63,11 +63,11 @@
 >
 
         <ImageView
-            android:layout_width="49dp"
-            android:layout_height="53dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="19dp"
-            android:src="@drawable/calendaricon" />
+            android:src="@mipmap/calendaricon" />
 
         <TextView
             android:id="@+id/tvPopupDate"
@@ -108,10 +108,10 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="49dp"
-            android:layout_height="53dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_marginLeft="20dp"
-            android:src="@drawable/clockicon" />
+            android:src="@mipmap/clockicon" />
 
         <TextView
             android:id="@+id/tvPopupTime"
@@ -203,35 +203,44 @@
 
         <ImageView
             android:id="@+id/ivDelete"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_gravity="start"
-            android:layout_marginLeft="40dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"
-            android:src="@drawable/trashicon" />
+            android:src="@mipmap/trashicon" />
+
+        <ImageView
+            android:id="@+id/ivSeeTags"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="end"
+            android:layout_marginLeft="140dp"
+            android:layout_marginTop="10dp"
+            android:src="@mipmap/tagicon" />
 
         <ImageView
             android:id="@+id/ivEditEvent"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_gravity="end"
             android:layout_marginRight="20dp"
-            android:layout_marginLeft="200dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:src="@drawable/peniconblack" />
+            android:src="@mipmap/penicon" />
 
 
 
     <ImageView
         android:id="@+id/ivConfirmChanges"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_gravity="end"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="200dp"
         android:layout_marginTop="10dp"
-        android:src="@drawable/checkmarkicon"
+        android:src="@mipmap/checkmarkicon"
         android:visibility="invisible"/>
     </LinearLayout>
 </LinearLayout>

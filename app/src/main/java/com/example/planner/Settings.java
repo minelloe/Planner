@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class Settings extends AppCompatActivity {
 
+    //linearlayouts
     private LinearLayout lyNewPassword;
     private LinearLayout lyDeleteAccount;
     private LinearLayout lyClearEvents;
@@ -51,7 +52,6 @@ public class Settings extends AppCompatActivity {
     public void  updateUI(FirebaseUser account){
         if(account != null){
             String email = account.getEmail();
-            Toast.makeText(this,"Signed in" + email,Toast.LENGTH_LONG).show();
 
         }else {
 
@@ -74,25 +74,26 @@ public class Settings extends AppCompatActivity {
         PasswordPopup = new Dialog(Settings.this);
         PasswordPopup.setCanceledOnTouchOutside(false);
 
+        //initialises linearlayouts
         lyNewPassword = (LinearLayout) findViewById(R.id.lyNewPassword);
         lyDeleteAccount = (LinearLayout) findViewById(R.id.lyDeleteAccount);
         lyClearEvents = (LinearLayout) findViewById(R.id.lyClearEvents);
 
+        //passwort reset
         lyNewPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(Settings.this,"Set new password",Toast.LENGTH_SHORT).show();
                 ShowPopup();
 
 
             }
         });
 
+        //delete account
         lyDeleteAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(Settings.this,"Sad to see you leave...",Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(Settings.this,"Sad to see you leave. :(",Toast.LENGTH_SHORT).show();
 
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -100,16 +101,19 @@ public class Settings extends AppCompatActivity {
                 Toast.makeText(Settings.this,"email: " + email,Toast.LENGTH_SHORT).show();
                 DatabaseReference DeleteAccount = database.getReference().child(email);
 
+                //deletes all data
                 DeleteAccount.removeValue();
 
 
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+                //deletes user
                 user.delete()
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
+                                    //goes to login page
                                     Intent myIntent = new Intent(Settings.this, MainActivity.class);
                                     Settings.this.startActivity(myIntent);
                                 }
@@ -125,12 +129,11 @@ public class Settings extends AppCompatActivity {
             }
         });
 
+        //clears events
         lyClearEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(Settings.this,"All events cleared",Toast.LENGTH_SHORT).show();
-
-
 
                 FirebaseUser currentUser = mAuth.getCurrentUser();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -139,6 +142,7 @@ public class Settings extends AppCompatActivity {
 
                 final String email = currentUser.getEmail().replace('.', ',');
 
+                //goes through all events
                 myRef.child(email + "/events").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -149,8 +153,6 @@ public class Settings extends AppCompatActivity {
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             DatabaseReference ref2 = database.getReference(email + "/events/" + EventName);
 
-
-                            // Attach a listener to read the data at our posts reference
                             ref2.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -164,24 +166,28 @@ public class Settings extends AppCompatActivity {
 
                                     DatabaseReference DeleteEvent = database.getReference(email + "/events/").child(name);
 
-                                    DeleteEvent.removeValue();
-                                    NotifyMe.cancel(getApplicationContext(),name);
-
-                                    if (additionalNotification.matches("none") == false){
-                                        NotifyMe.cancel(getApplicationContext(),name + "_additional");
+                                    //leaves "ignore" event so that the database structure won't get deleted
+                                    if (name.matches("ignore") != true){
+                                        //removes event
+                                        DeleteEvent.removeValue();
+                                        //cancels notification
+                                        NotifyMe.cancel(getApplicationContext(),name);
                                     }
 
 
+                                    //deletes additional notification
+                                    if (additionalNotification.matches("none") == false){
+                                        NotifyMe.cancel(getApplicationContext(),name + "_additional");
+                                    }
                                 }
 
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
-                                    System.out.println("The read failed: " + databaseError.getCode());
+
                                 }
                             });
                         }
                     }
-
 
 
                     @Override
@@ -194,25 +200,20 @@ public class Settings extends AppCompatActivity {
 
 
 
-                DatabaseReference mDatabaseReference = database.getReference();
-
-                EventY newEvent = new EventY("ignore", "ignore" ,"ignore", "ignore", "none");
-                mDatabaseReference = database.getReference().child(email + "/events/" + "ignore");
-                mDatabaseReference.setValue(newEvent);
 
             }
         });
     }
 
+    //shows new passwort dialog
     public void ShowPopup(){
         PasswordPopup.setContentView(R.layout.newpassword);
 
         //Edittexts
-
         final EditText NewPassword;
         final EditText NewPasswordRepeat;
 
-
+        //initialises edittexts
         NewPassword = (EditText) PasswordPopup.findViewById(R.id.etNewPassword);
         NewPasswordRepeat = (EditText) PasswordPopup.findViewById(R.id.etNewPasswordRepeat);
 
@@ -220,9 +221,11 @@ public class Settings extends AppCompatActivity {
         final Button btnCancelPassword;
         final Button btnConfirmPassword;
 
+        //initialises buttons
         btnCancelPassword = (Button) PasswordPopup.findViewById(R.id.btnCancelPassword);
         btnConfirmPassword = (Button) PasswordPopup.findViewById(R.id.btnConfirmPassword);
 
+        //closes dialog
         btnCancelPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -230,6 +233,7 @@ public class Settings extends AppCompatActivity {
             }
         });
 
+        //sets new password
         btnConfirmPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -259,13 +263,14 @@ public class Settings extends AppCompatActivity {
 
 
 
-
+        //shows dialog
         PasswordPopup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         PasswordPopup.show();
 
 
     }
 
+    //if back-button is pressed, animation is overriden
     @Override
     public void finish() {
         super.finish();

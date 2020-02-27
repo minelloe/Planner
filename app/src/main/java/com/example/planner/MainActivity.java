@@ -5,9 +5,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.content.Intent;
-import android.app.AlertDialog;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,17 +17,25 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
+//actually the login page
 public class MainActivity extends AppCompatActivity {
 
+    //Edittexts
     private EditText Username;
     private EditText Password;
+
+    //buttons
     private Button SignUp;
     private Button Login;
+
+    //counter for the amount of fails
     private int counter = 5;
+
+    //firebase stuff
     private FirebaseAuth mAuth;
+
+    //tag
     private static final String TAG = "MainActivity";
 
 
@@ -45,20 +51,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
-
-
-
+        //edittexts
         Username = (EditText) findViewById(R.id.etUsername);
         Password = (EditText) findViewById(R.id.etPassword);
+
+        //buttons
         Login = (Button) findViewById(R.id.btnLogin);
         SignUp = (Button) findViewById(R.id.btnSignUp);
-
 
         //firebase stuff
         mAuth = FirebaseAuth.getInstance();
 
+        //logs user in
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //goes to sign up page
         SignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,15 +87,15 @@ public class MainActivity extends AppCompatActivity {
     public void  updateUI(FirebaseUser account){
         if(account != null){
             String email = account.getEmail();
-            Toast.makeText(this,"Signed in" + email,Toast.LENGTH_LONG).show();
             Intent myIntent = new Intent(MainActivity.this, MainPage.class);
             MainActivity.this.startActivity(myIntent);
         }else {
-            Toast.makeText(this,"You're not signed in",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"You're not signed in ",Toast.LENGTH_LONG).show();
         }
     }
 
 
+    //goes to sign up page
     private void signup(){
         Intent myIntent = new Intent(MainActivity.this, SignUp.class);
         MainActivity.this.startActivity(myIntent);
@@ -95,15 +103,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    //validates user
     private void validate(String userUsername, String userPassword) {
         mAuth = FirebaseAuth.getInstance();
-        Toast.makeText(MainActivity.this, "Reached", Toast.LENGTH_SHORT).show();
             mAuth.signInWithEmailAndPassword(userUsername, userPassword)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                Toast.makeText(MainActivity.this, "login successful", Toast.LENGTH_SHORT).show();
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.w(TAG, "signInWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
@@ -118,12 +125,12 @@ public class MainActivity extends AppCompatActivity {
                                 updateUI(null);
                             }
 
-                            // ...
                         }
                     });
 
 
 
+            //if user fails 5 times, you won't be able to log in anymore
             if (counter <= 0){
                 Toast.makeText(MainActivity.this, "Cannot login, amount of attempts surpassed", Toast.LENGTH_SHORT).show();
                 Login.setEnabled(false);

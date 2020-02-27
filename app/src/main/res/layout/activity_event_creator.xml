@@ -22,7 +22,7 @@
         app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnGoToNewEvent"
-        app:layout_constraintVertical_bias="0.208"
+        app:layout_constraintVertical_bias="0.212"
         app:layout_goneMarginTop="5dp">
 
         <me.gujun.android.taggroup.TagGroup

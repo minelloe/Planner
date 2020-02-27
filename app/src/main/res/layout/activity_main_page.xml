@@ -12,7 +12,7 @@
         android:id="@+id/toolbar2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#e6d0b2"
+        android:background="@drawable/custom_toolbar"
         android:fontFamily="@font/montserrat"
         android:minHeight="?attr/actionBarSize"
         android:textColor="#e6d0b2"
@@ -25,35 +25,13 @@
         android:id="@+id/lvEvents"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/Space"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar2" >
-
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar2"
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_editor_absoluteX="60dp">
 
 
     </ListView>
-
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_gravity="center"
-        android:background="@drawable/dialog_bg2"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lvEvents"
-        app:layout_constraintVertical_bias="1.0">
-
-        <com.skyhope.eventcalenderlibrary.CalenderEvent
-            android:id="@+id/calender_event"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
 
     <Button
         android:id="@+id/btnLogout"
@@ -70,13 +48,13 @@
         app:layout_constraintTop_toTopOf="@+id/toolbar2"
         app:layout_constraintVertical_bias="0.461" />
 
-    <Button
+    <ImageView
     android:id="@+id/btnSettings"
-    android:layout_width="100dp"
-    android:layout_height="43dp"
+    android:layout_width="47dp"
+    android:layout_height="47dp"
     android:background="@drawable/custom_buttons"
     android:fontFamily="@font/montserrat"
-    android:text="Settings"
+        android:src="@mipmap/settingsicon"
     android:textColor="#faf5eb"
     app:layout_constraintBottom_toTopOf="@+id/lvEvents"
     app:layout_constraintEnd_toStartOf="@+id/btnGoToNewEvent"
@@ -86,11 +64,12 @@
     app:layout_constraintVertical_bias="0.461" />
 
 
-    <Button
+    <ImageView
         android:id="@+id/btnSearchTags"
-        android:layout_width="100dp"
-        android:layout_height="43dp"
+        android:layout_width="47dp"
+        android:layout_height="47dp"
         android:background="@drawable/custom_buttons"
+        android:src="@mipmap/searchicon"
         android:fontFamily="@font/montserrat"
         android:text="Search"
         android:textColor="#faf5eb"
@@ -102,14 +81,30 @@
         app:layout_constraintVertical_bias="0.461" />
 
     <Button
-        android:id="@+id/btnGoToNewEvent"
-        android:layout_width="47dp"
+        android:id="@+id/btnClearSearch"
+        android:layout_width="150dp"
         android:layout_height="43dp"
         android:background="@drawable/custom_buttons"
         android:fontFamily="@font/montserrat"
+        android:text="Clear filter"
+        android:textColor="#faf5eb"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.974"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar2"
+        app:layout_constraintVertical_bias="0.974" />
+
+    <Button
+        android:id="@+id/btnGoToNewEvent"
+        android:layout_width="47dp"
+        android:layout_height="47dp"
+        android:background="@drawable/custom_buttons"
         android:text="+"
         android:textColor="#faf5eb"
         android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar2"
         app:layout_constraintEnd_toStartOf="@+id/btnLogout"
         app:layout_constraintHorizontal_bias="0.959"
@@ -121,11 +116,9 @@
         android:id="@+id/Space"
         android:layout_width="407dp"
         android:layout_height="3dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lvEvents"
-        app:layout_constraintVertical_bias="0.979" />
+        app:layout_constraintTop_toBottomOf="@+id/lvEvents" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

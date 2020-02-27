@@ -5,9 +5,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.content.Intent;
-import android.app.AlertDialog;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,11 +24,18 @@ import java.util.regex.Pattern;
 
 public class SignUp extends AppCompatActivity {
 
+    //edittexts
     private EditText Email;
     private EditText Password;
     private EditText PasswordValidation;
+
+    //buttons
     private Button SignUp;
+
+    //firebase stuff
     private FirebaseAuth mAuth;
+
+    //tag
     private static final String TAG = "SignUp";
 
     @Override
@@ -38,21 +43,24 @@ public class SignUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        //initialises edittexts
         Email = (EditText) findViewById(R.id.etEmail);
         Password = (EditText) findViewById(R.id.etPassword);
         PasswordValidation = (EditText) findViewById(R.id.etPasswordValidation);
 
-
+        //initialises buttons
         SignUp = (Button) findViewById(R.id.btnSignUp);
 
         //firebase stuff
         mAuth = FirebaseAuth.getInstance();
 
-
+        //signup
         SignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //checks if email is valid
                 if (isValid(Email.getText().toString())){
+                    //checks is passwords match
                     if (Password.getText().toString().matches(PasswordValidation.getText().toString())){
                         createnewuser(Email.getText().toString(), Password.getText().toString());
                     } else {
@@ -71,7 +79,6 @@ public class SignUp extends AppCompatActivity {
     public void  updateUI(FirebaseUser account){
         if(account != null){
             String email = account.getEmail();
-            Toast.makeText(this,"Signed in" + email,Toast.LENGTH_LONG).show();
             Intent myIntent = new Intent(SignUp.this, MainPage.class);
             SignUp.this.startActivity(myIntent);
         }else {
@@ -79,6 +86,7 @@ public class SignUp extends AppCompatActivity {
         }
     }
 
+    //creates new user
     private void createnewuser(String userUsername, String userPassword){
         mAuth = FirebaseAuth.getInstance();
         Toast.makeText(SignUp.this, "Reached", Toast.LENGTH_SHORT).show();
@@ -96,16 +104,16 @@ public class SignUp extends AppCompatActivity {
                             DatabaseReference mDatabaseReference = mDatabase.getReference();
                             String EmailToSave = Email.getText().toString().replace('.', ',');
 
-                            EventY newEvent = new EventY("ignore", "ignore" ,"ignore", "ignore", "none");
+                            //creates ignore event, else the structure would not be created
+                            EventY newEvent = new EventY("ignore", "ignore" ,"ignore", "ignore", "none", "none");
                             mDatabaseReference = mDatabase.getReference().child(EmailToSave + "/events/" + "ignore");
                             mDatabaseReference.setValue(newEvent);
 
-
+                            //updates current state
                             updateUI(user);
 
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(SignUp.this, "Signup failed. " +  task.getException().getMessage() + " :(",
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
@@ -117,6 +125,7 @@ public class SignUp extends AppCompatActivity {
 
     }
 
+    //Checks if email is valid
     public static boolean isValid(String email)
     {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
@@ -130,6 +139,7 @@ public class SignUp extends AppCompatActivity {
         return pat.matcher(email).matches();
     }
 
+    //if back-button is pressed, animation is overriden
     @Override
     public void finish() {
         super.finish();

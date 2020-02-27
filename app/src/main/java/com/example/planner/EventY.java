@@ -1,21 +1,26 @@
 package com.example.planner;
 
+//renamed due to a package, Y has no meaning
 public class EventY {
+
     private String name;
     private String date;
     private String notes;
     private String time;
     private String additionalNotification;
+    private String tags;
 
-    public EventY(String Name, String Date, String Notes, String Time, String AdditionalNotification){
+    //constructor
+    public EventY(String Name, String Date, String Notes, String Time, String AdditionalNotification, String Tags){
         this.name = Name;
         this.date = Date;
         this.notes = Notes;
         this.time = Time;
         this.additionalNotification = AdditionalNotification;
+        this.tags = Tags;
     }
 
-    //NAME
+    //NAME GET & SET
     public String getName(){
         return name;
     }
@@ -24,7 +29,7 @@ public class EventY {
         this.name = Name;
     }
 
-    //DATE
+    //DATE GET & SET
     public String getDate(){
         return date;
     }
@@ -33,7 +38,7 @@ public class EventY {
         this.date = Date;
     }
 
-    //NOTES
+    //NOTES GET & SET
     public String getNotes(){
         return notes;
     }
@@ -42,7 +47,7 @@ public class EventY {
         this.notes = Notes;
     }
 
-    //TIME
+    //TIME GET & SET
     public String getTime(){
         return time;
     }
@@ -51,12 +56,21 @@ public class EventY {
         this.time = Time;
     }
 
-    //ADDITIONAL NOTIFICATION
+    //ADDITIONAL NOTIFICATION GET & SET
     public String getAdditionalNotification(){
         return additionalNotification;
     }
 
     public void setAdditionalNotification(String AdditionalNotification){
         this.additionalNotification = AdditionalNotification;
+    }
+
+    //TAGS GET & SET
+    public String getTags(){
+        return tags;
+    }
+
+    public void setTags(String Tags){
+        this.tags = Tags;
     }
 }

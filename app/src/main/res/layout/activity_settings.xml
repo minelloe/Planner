@@ -12,15 +12,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/the_blacklist"
+        android:gravity="center"
         android:text="Settings"
         android:textColor="#faf5eb"
         android:textSize="70sp"
-        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.441"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.295" />
+        app:layout_constraintVertical_bias="0.293" />
 
     <View
         android:id="@+id/view"
@@ -68,7 +69,7 @@
                 android:inputType="none"
                 android:text="Reset Pasword"
                 android:textColor="#000"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -79,7 +80,7 @@
                 android:inputType="none"
                 android:text="Set new password"
                 android:textColor="#9d7848"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -87,8 +88,6 @@
         android:id="@+id/lyDeleteAccount"
         android:layout_width="401dp"
         android:layout_height="72dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -118,7 +117,7 @@
                 android:inputType="none"
                 android:text="Delete Account"
                 android:textColor="#000"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="297dp"
@@ -129,7 +128,7 @@
                 android:inputType="none"
                 android:text="permanently delete account"
                 android:textColor="#9d7848"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -179,7 +178,7 @@
                 android:inputType="none"
                 android:text="Delete all Events"
                 android:textColor="#000"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="297dp"
@@ -190,7 +189,7 @@
                 android:inputType="none"
                 android:text="Clear list and start fresh!"
                 android:textColor="#9d7848"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>
 
